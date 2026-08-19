@@ -24,6 +24,8 @@ target/
 .env.test.local
 .env.production.local
 *.env
+db.properties
+**/db.properties
 
 # ------------------------------------------
 # Java / Compiled Class Files
