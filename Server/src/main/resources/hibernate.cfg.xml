@@ -4,20 +4,11 @@
         "https://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-    	<property name="hibernate.connection.driver_class">
-            com.mysql.cj.jdbc.Driver
-        </property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/cartly_db</property>
-        <property name="hibernate.connection.password">MYSQL!@#</property>
-        <property name="hibernate.connection.username">root</property>
+    	<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.hbm2ddl.auto">validate</property>
-         <property name="hibernate.show_sql">
-            true
-        </property>
-        <property name="hibernate.format_sql">
-            true
-        </property>
+         <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
         <mapping class="com.cartly.entity.User"/>
     </session-factory>
 </hibernate-configuration>
