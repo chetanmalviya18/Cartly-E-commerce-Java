@@ -90,6 +90,7 @@ ehthumbs.db
 Thumbs.db
 desktop.ini
 $RECYCLE.BIN/
+.specs
 
 # ------------------------------------------
 # Temporary & Backup Files

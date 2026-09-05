@@ -3,13 +3,37 @@ package com.cartly.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.cartly.entity.User;
 import com.cartly.entity.UserRole;
+import com.cartly.util.HibernateUtil;
 
 public class UserDAOTest {
 	private final UserDAO userDAO = new UserDAO();
+	
+	@BeforeEach
+	@AfterEach
+	void cleanDatabase() {
+		Transaction transaction = null;
+		try(Session session = 
+				HibernateUtil.getSessionFactory().openSession()){
+			
+			transaction = session.beginTransaction();
+			session.createNativeQuery("DELETE FROM users", void.class).executeUpdate();
+			transaction.commit();
+		} catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+	}
+	
 	@Test
 	void saveUser_shouldPersistUser() {
 		User user = new User();
