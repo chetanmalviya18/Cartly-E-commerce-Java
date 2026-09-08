@@ -52,6 +52,9 @@ public class AuthenticationFilter implements Filter {
     }
 
     private boolean isPublicEndpoint(String path, String method) {
+        if ("OPTIONS".equalsIgnoreCase(method)) {
+            return true;
+        }
         if (!"POST".equalsIgnoreCase(method)) {
             return false;
         }
