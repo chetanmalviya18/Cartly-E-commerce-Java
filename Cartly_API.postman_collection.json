@@ -327,6 +327,100 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Cart",
+      "description": "Cart management endpoints. All endpoints require authentication.",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Retrieve the current user's cart and items. Requires authentication. Returns 200 OK."
+          },
+          "response": []
+        },
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "items"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"quantity\": 2\n}"
+            },
+            "description": "Add an item to the cart or increase its quantity. Requires authentication. Returns 204 No Content."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Cart Item Quantity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/items/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "items", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 3\n}"
+            },
+            "description": "Update the exact quantity of an existing item in the cart. Requires authentication. Returns 204 No Content."
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Item from Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/items/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "items", "1"]
+            },
+            "description": "Remove a specific item entirely from the cart. Requires authentication. Returns 204 No Content."
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Remove all items from the user's cart. Requires authentication. Returns 204 No Content."
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

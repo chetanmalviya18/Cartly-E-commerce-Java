@@ -43,4 +43,8 @@ public class UserDAO {
 			return session.find(User.class, id);
 		}
 	}
+	
+	public User findById(Session session, Long id) {
+	    return session.find(User.class, id);
+	}
 }

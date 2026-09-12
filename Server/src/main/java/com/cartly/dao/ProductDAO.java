@@ -102,4 +102,14 @@ public class ProductDAO {
 		// Re-fetch with JOIN FETCH so category proxy is fully initialized
 		return findById(product.getId());
 	}
+	
+	public Product findById(Session session, Long id) {
+	    return session.createQuery(
+	            "SELECT p FROM Product p " +
+	            "JOIN FETCH p.category " +
+	            "WHERE p.id = :id",
+	            Product.class)
+	            .setParameter("id", id)
+	            .uniqueResult();
+	}
 }
