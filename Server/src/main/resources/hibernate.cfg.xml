@@ -14,5 +14,9 @@
 		<mapping class="com.cartly.entity.Product"/>
         <mapping class="com.cartly.entity.Cart"/>
         <mapping class="com.cartly.entity.CartItem"/>
+        <mapping class="com.cartly.entity.Address"/>
+        <mapping class="com.cartly.entity.Order"/>
+		<mapping class="com.cartly.entity.OrderItem"/>
+		<mapping class="com.cartly.entity.Payment"/>
     </session-factory>
 </hibernate-configuration>

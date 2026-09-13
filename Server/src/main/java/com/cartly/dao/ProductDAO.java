@@ -112,4 +112,8 @@ public class ProductDAO {
 	            .setParameter("id", id)
 	            .uniqueResult();
 	}
+	
+	public void update(Session session, Product product) {
+	    session.merge(product);
+	}
 }
