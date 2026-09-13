@@ -44,11 +44,22 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
         boolean isAuthenticated = (session != null && session.getAttribute("userId") != null);
 
-        if (isAuthenticated) {
-            chain.doFilter(request, response);
-        } else {
+        if (!isAuthenticated) {
             sendUnauthorizedResponse(httpResponse);
+            return;
         }
+
+        if (isAdminEndpoint(path)) {
+
+            Object role = session.getAttribute("role");
+
+            if (!"ADMIN".equals(role)) {
+                sendForbiddenResponse(httpResponse);
+                return;
+            }
+        }
+
+        chain.doFilter(request, response);
     }
 
     private boolean isPublicEndpoint(String path, String method) {
@@ -76,5 +87,27 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void destroy() {
+    }
+    
+    private boolean isAdminEndpoint(String path) {
+        return path.startsWith("/api/admin/");
+    }
+
+    private void sendForbiddenResponse(HttpServletResponse response)
+            throws IOException {
+
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        Map<String, String> errorResponse = Map.of(
+                "error", "Forbidden",
+                "message", "Admin access required."
+        );
+
+        objectMapper.writeValue(
+                response.getWriter(),
+                errorResponse
+        );
     }
 }

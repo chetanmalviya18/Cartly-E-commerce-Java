@@ -411,4 +411,116 @@ public class OrderService {
 
         return getOrderResponse(userId, order.getId());
     }
+    
+    public List<OrderResponse> getAllOrdersForAdmin() {
+
+        TransactionManager transactionManager =
+                transactionManagerFactory.create();
+
+        try {
+            Session session = transactionManager.getSession();
+
+            List<Order> orders =
+                    orderDAO.findAll(session);
+
+            List<OrderResponse> responses = orders.stream()
+                    .map(order -> {
+
+                        List<OrderItem> items =
+                                orderItemDAO.findByOrderId(
+                                        session,
+                                        order.getId()
+                                );
+
+                        return new OrderResponse(order, items);
+                    })
+                    .toList();
+
+            transactionManager.commit();
+
+            return responses;
+
+        } catch (RuntimeException e) {
+
+            transactionManager.rollback();
+            throw e;
+        }
+    }
+
+    public OrderResponse updateOrderStatus(
+            Long orderId,
+            OrderStatus newStatus) {
+
+        validateOrderId(orderId);
+
+        if (newStatus == null) {
+            throw new IllegalArgumentException(
+                    "Order status is required"
+            );
+        }
+
+        TransactionManager transactionManager =
+                transactionManagerFactory.create();
+
+        try {
+            Session session = transactionManager.getSession();
+
+            Order order =
+                    orderDAO.findById(session, orderId);
+
+            if (order == null) {
+                throw new IllegalArgumentException(
+                        "Order not found"
+                );
+            }
+
+            validateStatusTransition(
+                    order.getStatus(),
+                    newStatus
+            );
+
+            order.setStatus(newStatus);
+
+            orderDAO.update(session, order);
+
+            List<OrderItem> items =
+                    orderItemDAO.findByOrderId(
+                            session,
+                            orderId
+                    );
+
+            OrderResponse response =
+                    new OrderResponse(order, items);
+
+            transactionManager.commit();
+
+            return response;
+
+        } catch (RuntimeException e) {
+
+            transactionManager.rollback();
+            throw e;
+        }
+    }
+
+    private void validateStatusTransition(
+            OrderStatus currentStatus,
+            OrderStatus newStatus) {
+
+        if (currentStatus == OrderStatus.DELIVERED ||
+                currentStatus == OrderStatus.CANCELLED) {
+
+            throw new IllegalArgumentException(
+                    "Order cannot be updated after it is "
+                            + currentStatus
+            );
+        }
+
+        if (newStatus == OrderStatus.PLACED) {
+
+            throw new IllegalArgumentException(
+                    "Order cannot be moved back to PLACED"
+            );
+        }
+    }
 }

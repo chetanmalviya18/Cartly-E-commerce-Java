@@ -29,4 +29,13 @@ public class OrderDAO {
     public void update(Session session, Order order) {
         session.merge(order);
     }
+    
+    public List<Order> findAll(Session session) {
+
+        return session.createQuery(
+                "SELECT o FROM Order o " +
+                "ORDER BY o.createdAt DESC",
+                Order.class
+        ).getResultList();
+    }
 }
